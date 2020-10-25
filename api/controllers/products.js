@@ -15,7 +15,7 @@ exports.products_get_all = async (req, res, next) => {
                     _id: doc._id,
                     request: {
                         type: 'GET',
-                        url: 'http://localhost:4000/products/' + doc._id
+                        url: 'http://localhost:'+process.env.PORT+'/products/' + doc._id
                     }
                 }
             })
@@ -49,8 +49,8 @@ exports.products_create_product = async(req, res, next) => {
                 _id : result._id,
                 productImage: result.productImage,
                 request: {
-                    type: "GET",
-                    url: "http://localhost:4000/" + result._id
+                    type: 'GET',
+                    url: 'http://localhost:' + process.env.PORT+ '/' + result._id
                 }
             }
         })
@@ -70,9 +70,9 @@ exports.products_get_product = async (req, res, next) => {
             res.status(200).json({
                 product: doc,
                 request: {
-                    type: "GET",
-                    description: "Get all products",
-                    url: "http://localhost:4000/products"
+                    type: 'GET',
+                    description: 'Get all products',
+                    url: 'http://localhost:' + process.env.PORT + '/products'
                     }
             })
         }
@@ -105,8 +105,8 @@ exports.products_update_product = async (req, res, next) => {
         await res.status(200).json({
             message: "Product updated",
             request: {
-                type: "GET",
-                url: "http://localhost:4000/products/"+ id
+                type: 'GET',
+                url: 'http://localhost:' + process.env.PORT + '/products/'+ id
             }
         });
     }
@@ -126,7 +126,7 @@ exports.products_delete_product = async (req, res, next) => {
             message: "Product deleted",
             request: {
                 type: 'POST',
-                url: 'http://localhost:4000/products',
+                url: 'http://localhost:' + process.env.PORT + '/products',
                 body: { name: 'String', price: 'Number'}
             }
         })
