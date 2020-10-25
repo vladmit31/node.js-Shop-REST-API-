@@ -4,7 +4,7 @@ const router = express.Router();
 const UserController = require('../controllers/user');
 const checkAuth = require('../middleware/check-auth');
 
-router.post('/signup', checkAuth, UserController.users_create_user);
+router.post('/signup', UserController.users_create_user);
 
 router.delete('/:userId', checkAuth, UserController.users_delete_user);
 
