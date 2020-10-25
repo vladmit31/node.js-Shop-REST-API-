@@ -10,7 +10,7 @@ const userRoutes = require('./api/routes/user')
 
 mongoose.connect("mongodb+srv://"
                     +process.env.MONGO_ATLAS_USER+":"
-                    + process.env.MONGO_ATLAS_PW +"@"
+                    +process.env.MONGO_ATLAS_PW +"@"
                     +process.env.MONGO_ATLAS_URL+"?retryWrites=true&w=majority", 
     {
     useNewUrlParser: true, 
