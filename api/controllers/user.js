@@ -19,8 +19,14 @@ exports.users_create_user = async (req, res, next) => {
             const user = new User({
                 _id: new mongoose.Types.ObjectId(),
                 email:  req.body.email,
-                password: hash
+                password: hash,
+                role: req.body.role
             });
+
+            if(user.role == 'admin' && req.userData.role != 'admin')
+            {
+                res.status(403).json({message: 'Unauthorized'});
+            }
 
             await user.save();
 
@@ -58,7 +64,8 @@ exports.users_authenticate_user = async (req, res, next) => {
                     const token = jwt.sign(
                         {
                             email: user[0].email,
-                            userId: user[0]._id 
+                            userId: user[0]._id,
+                            role: user[0].role
                         }, 
                         process.env.JWT_KEY, 
                         {
