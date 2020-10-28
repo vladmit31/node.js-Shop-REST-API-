@@ -102,7 +102,7 @@ exports.products_update_product = async (req, res, next) => {
 
     try{
         await Product.update({_id: id}, {$set: updateOps});
-        await res.status(200).json({
+        res.status(200).json({
             message: "Product updated",
             request: {
                 type: 'GET',
@@ -111,18 +111,23 @@ exports.products_update_product = async (req, res, next) => {
         });
     }
     catch(err){
-        await res.status(500).json({error: err})
+        res.status(500).json({error: err})
     }
 
 };
 
 exports.products_delete_product = async (req, res, next) => {
     const id = req.params.productId;
-
-    //TODO: check if id exists
+    
     try{
+        const product = await Product.findById(id);
+
+        if(!product){
+            res.status(404).json({message: "Product not found"})
+        }
+
         await Product.remove({_id: id});
-        await res.status(200).json({
+        res.status(200).json({
             message: "Product deleted",
             request: {
                 type: 'POST',
