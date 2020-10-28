@@ -7,7 +7,7 @@ exports.orders_get_all = async (req, res, next) => {
 
     try{
         const docs = await Order.find().select('quantity _id product').populate('product', 'name');
-        await res.status(200).json({
+        res.status(200).json({
             count: docs.length,
             orders: docs.map(doc => {
                 return {
@@ -57,7 +57,7 @@ exports.orders_create_order = async (req, res, next) => {
 
     }
     catch(err){
-        await res.status(500).json({error: err })
+        res.status(500).json({error: err })
     }
 };
 
@@ -65,7 +65,7 @@ exports.orders_get_order = async (req, res, next) => {
 
     try{
         const result = await Order.findById(req.params.orderId).select('quantity product _id').populate('product')
-        await res.status(200).json({
+        res.status(200).json({
             message: "Order fetched successfully",
             order: result,
             request: {
@@ -76,7 +76,7 @@ exports.orders_get_order = async (req, res, next) => {
     }
     catch(err)
     {
-        await res.status(500).json({
+        res.status(500).json({
             error : err
         })
     }
@@ -84,9 +84,17 @@ exports.orders_get_order = async (req, res, next) => {
 
 exports.orders_delete_order = async (req, res, next) => {
 
+    const id = req.params.orderId;
+
     try{
-        const result = await Order.remove({_id: req.params.orderId});
-        await res.status(200).json({
+        const order = await Order.findById(id);
+
+        if(!order){
+            res.status(404).json({message: 'Order not found'});
+        }
+
+        await Order.remove({_id: id});
+        res.status(200).json({
             message: "Order deleted",
             request: {
                 type: 'POST',
@@ -99,6 +107,6 @@ exports.orders_delete_order = async (req, res, next) => {
         })
     }
     catch(err){
-        await res.status(500).json({error: err})
+        res.status(500).json({error: err})
     }
 };
