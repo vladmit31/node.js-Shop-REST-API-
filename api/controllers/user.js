@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
-
 exports.users_create_user = async (req, res, next) => {
+    
     try{
         const user = await User.find({email: req.body.email});
         if(user.length >= 1){
@@ -19,14 +19,8 @@ exports.users_create_user = async (req, res, next) => {
             const user = new User({
                 _id: new mongoose.Types.ObjectId(),
                 email:  req.body.email,
-                password: hash,
-                role: req.body.role
+                password: hash
             });
-
-            if(user.role == 'admin' && req.userData.role != 'admin')
-            {
-                res.status(403).json({message: 'Unauthorized'});
-            }
 
             await user.save();
 
